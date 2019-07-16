@@ -1,18 +1,26 @@
 @{
     ViewData["Title"] = "Login to Fiction Fantasy";
 }
+@model LoginViewModel
 
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">Login</h5>
-    <form>
+    <form method="post">
+      @if (ViewData.ModelState["InvalidCredentials"] != null)
+      {
+        <div class="alert alert-error">
+          @ViewData.ModelState["InvalidCredentials"].Errors[0].ErrorMessage
+        </div>
+      }
+      <input type="hidden" asp-for="ReturnUrl">
       <div class="form-group">
         <label for="username">Email address</label>
-        <input class="form-control" id="username" placeholder="Enter username">
+        <input class="form-control" asp-for="Username" placeholder="Enter username">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Password">
+        <input type="password" asp-for="Password" class="form-control" placeholder="Password">
       </div>
       <button type="submit" class="btn btn-primary">Log in</button>
     </form>

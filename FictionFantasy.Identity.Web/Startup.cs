@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using static IdentityServer4.Models.IdentityResources;
 
 namespace FictionFantasy.Identity.Web
 {
@@ -30,10 +29,13 @@ namespace FictionFantasy.Identity.Web
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.AddIdentityServer()
+            services.AddIdentityServer(options =>
+            {
+                options.UserInteraction.LoginUrl = "/Login";
+            })
                 .AddDeveloperSigningCredential()
                 .AddInMemoryClients(new List<Client>
                 {
@@ -42,18 +44,22 @@ namespace FictionFantasy.Identity.Web
                         ClientId = "ff-web",
                         ClientName = "Fiction Fantasy Web",
                         AllowedGrantTypes = GrantTypes.Implicit,
-                        AllowedScopes = new List<string> { "ff-api" },
-                        AccessTokenLifetime = (int)TimeSpan.FromDays(1).TotalSeconds
+                        AllowedScopes = new List<string> { "openid", "profile", "ffs" },
+                        AccessTokenLifetime = (int)TimeSpan.FromDays(1).TotalSeconds,
+                        RedirectUris = new List<string> { "http://localhost:4200/assets/signin-callback.html", "http://localhost:4200/assets/signin-silent.html" },
+                        PostLogoutRedirectUris = new List<string>(),
+                        AllowAccessTokensViaBrowser = true,
+                        RequireConsent = false
                     }
                 }).AddInMemoryPersistedGrants()
                 .AddInMemoryApiResources(new List<ApiResource>
                 {
-                    
+                    new ApiResource("ffs", "Fiction Fantasy Server")
                 })
                 .AddInMemoryIdentityResources(new List<IdentityResource>
                 {
-                    new OpenId(),
-                    new Profile()
+                    new IdentityResources.OpenId(),
+                    new IdentityResources.Profile()
                 }).AddTestUsers(new List<TestUser>
                 {
                     new TestUser
@@ -82,7 +88,7 @@ namespace FictionFantasy.Identity.Web
                     }
                 });
 
-
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -99,7 +105,12 @@ namespace FictionFantasy.Identity.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseCors(c =>
+            {
+                c.AllowAnyOrigin();
+                c.AllowAnyHeader();
+                c.AllowAnyMethod();
+            });
             app.UseIdentityServer();
 
             app.UseHttpsRedirection();
