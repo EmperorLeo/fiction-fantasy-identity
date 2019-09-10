@@ -3,26 +3,32 @@
 }
 @model LoginViewModel
 
-<div class="card">
-  <div class="card-body">
-    <h5 class="card-title">Login</h5>
-    <form method="post">
-      @if (ViewData.ModelState["InvalidCredentials"] != null)
-      {
-        <div class="alert alert-error">
-          @ViewData.ModelState["InvalidCredentials"].Errors[0].ErrorMessage
+<div class="login-wrapper">
+  <div class="login">
+    <div class="login-form">
+      <h5 class="login-header">Login to Fiction Fantasy</h5>
+      <form method="post">
+        @if (ViewData.ModelState["InvalidCredentials"] != null)
+        {
+          <div class="alert alert-error">
+            @ViewData.ModelState["InvalidCredentials"].Errors[0].ErrorMessage
+          </div>
+        }
+        <input type="hidden" asp-for="ReturnUrl">
+        <div class="login-author-wrapper">
+          <label class="login-password-label" for="username">By:</label>
+          <input class="login-author" asp-for="Username" placeholder="Enter username">
         </div>
-      }
-      <input type="hidden" asp-for="ReturnUrl">
-      <div class="form-group">
-        <label for="username">Email address</label>
-        <input class="form-control" asp-for="Username" placeholder="Enter username">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" asp-for="Password" class="form-control" placeholder="Password">
-      </div>
-      <button type="submit" class="btn btn-primary">Log in</button>
-    </form>
+        <div class="login-password-wrapper">
+          <label for="password">Password</label>
+          <input class="login-password" type="password" asp-for="Password" placeholder="Password">
+        </div>
+        <button type="submit" class="login-button">Log in</button>
+        <p>I'll fix the css later</p>
+      </form>
+    </div>
+    <div class="signup-form">
+
+    </div>
   </div>
 </div>

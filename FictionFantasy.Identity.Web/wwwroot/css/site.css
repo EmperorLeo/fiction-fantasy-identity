@@ -36,21 +36,48 @@ button.accept-policy {
 
 /* Sticky footer styles
 -------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+
+/* Custom CSS for FF: */
+.login-wrapper {
+  margin: 60px auto 0 auto;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+.login {
+  background: url('/assets/bookcover2.svg');
+  height: 732px;
+  width: 1000px;
+  background-size: cover;
+  margin: 50px; /* awful hack */
+  position: relative;
 }
-.footer {
+
+.login-form {
   position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px; /* Vertically center the text there */
+  top: 125px;
+  left: 75px;
+  transform: rotate(-4deg);
 }
+
+.login-header {
+  padding-bottom: 5px;
+  border-bottom: 1px solid black;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.login-author-wrapper {
+
+}
+
+.login-password-wrapper {
+
+}
+
+.login-author {
+
+}
+
+.login-password {
+
+}
+
